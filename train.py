@@ -12,7 +12,7 @@ def make_data(n=1000, seed=42):
     size = rng.uniform(30, 250, n)          # m2
     bedrooms = rng.integers(1, 6, n)
     age = rng.uniform(0, 80, n)             # years
-    price = 50_000 + 2_500 * size + 10_000 * bedrooms - 800 * age + rng.normal(0, 15_000, n)
+    price = 50_000 + 2_500 * size + 10_000 * bedrooms - 800 * age + rng.normal(0, 150_000, n)
     return np.column_stack([size, bedrooms, age]), price
 
 
