@@ -59,6 +59,7 @@ jobs:
           GH_REPO: ${{ github.repository }}
         with:
           host: ${{ secrets.SERVER_HOST }}
+          port: 9011
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           envs: GH_ACTOR,GH_TOKEN,GH_REPO
