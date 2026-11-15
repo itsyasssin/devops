@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements-dev.txt
+
+      - name: Train
+        run: python train.py
+
+      - name: Test
+        run: pytest -q
+
+      - name: Docker build (dev, not pushed)
+        run: docker build -t tiny-cicd:dev .
+
+      - name: Smoke test the container
+        run: |
+          docker run -d -p 8000:8000 --name app tiny-cicd:dev
+          sleep 5
+          curl -f http://localhost:8000/health
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: model
+          path: |
+            model.joblib
+            metrics.json

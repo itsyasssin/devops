@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>House price predictor</title>
+<style>
+  body{font-family:system-ui,sans-serif;max-width:380px;margin:3rem auto;padding:0 1rem}
+  label{display:block;margin:.8rem 0 .2rem}
+  input,button{width:100%;padding:.5rem;font-size:1rem;box-sizing:border-box}
+  button{margin-top:1rem;cursor:pointer}
+  #out{font-size:1.4rem;margin-top:1.2rem;font-weight:600}
+  small{color:#888}
+</style>
+</head>
+<body>
+<h2>House price predictor</h2>
+<label>Size (m²)</label><input id="size" type="number" value="100">
+<label>Bedrooms</label><input id="bedrooms" type="number" value="3">
+<label>Age (years)</label><input id="age" type="number" value="10">
+<button onclick="go()">Predict</button>
+<div id="out"></div>
+<small id="ver"></small>
+<script>
+async function go(){
+  const body = {size:+size.value, bedrooms:+bedrooms.value, age:+age.value};
+  const r = await fetch("/predict",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+  const d = await r.json();
+  out.textContent = r.ok ? "€ " + d.price.toLocaleString() : "Invalid input";
+  if(r.ok) ver.textContent = "model version: " + d.version;
+}
+</script>
+</body>
+</html>
